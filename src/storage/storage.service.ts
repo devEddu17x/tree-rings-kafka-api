@@ -9,18 +9,18 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 export class StorageService {
     private s3: S3Client;
     private bucket: string;
-    private ingestionUrl: string;
+    private ingestionBasePath: string;
     constructor(private readonly configService: ConfigService) {
         const storage = this.configService.get('storage');
         this.s3 = new S3Client(storage.config);
         this.bucket = storage.bucket;
-        this.ingestionUrl = storage.baseUrlIngestion;
+        this.ingestionBasePath = storage.ingestionBasePath;
     }
 
     private buildKey(filename: string): string {
         const extension = filename.includes('.') ? filename.split('.').pop() : 'bin';
         const timestamp = Date.now();
-        return `$${this.ingestionUrl}/${filename}_${timestamp}.${extension}`;
+        return `$${this.ingestionBasePath}/${filename}_${timestamp}.${extension}`;
     }
 
     async generatePresignedUrl(
