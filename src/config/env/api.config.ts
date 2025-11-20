@@ -1,7 +1,7 @@
 import { registerAs } from "@nestjs/config";
 
 export default registerAs("api", () => {
-  const { API_PREFIX, PORT: API_PORT } = process.env;
+  const { API_PREFIX, API_PORT } = process.env;
   const missingVars = [
     ['API_PREFIX', API_PREFIX],
     ['API_PORT', API_PORT],
