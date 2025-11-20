@@ -9,29 +9,27 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 export class StorageService {
     private s3: S3Client;
     private bucket: string;
-    private ingestionBasePath: string;
     constructor(private readonly configService: ConfigService) {
         const storage = this.configService.get('storage');
         this.s3 = new S3Client(storage.config);
         this.bucket = storage.bucket;
-        this.ingestionBasePath = storage.ingestionBasePath;
     }
 
-    private buildKey(filename: string): string {
+    private buildKey(filename: string, prefix?: string): string {
         const extension = filename.includes('.') ? filename.split('.').pop() : 'bin';
         const timestamp = Date.now();
-        return `$${this.ingestionBasePath}/${filename}_${timestamp}.${extension}`;
+        return `$${prefix ?? 'data'}/${filename}_${timestamp}.${extension}`;
     }
 
     async generatePresignedUrl(
         files: FilePlan[],
-        opts?: { ttlSeconds?: number; cacheControl?: string },
+        opts?: { ttlSeconds?: number; cacheControl?: string, prefix?: string },
     ): Promise<PresignedPut[]> {
         const ttl = opts?.ttlSeconds ?? 600; // 10 min
         const cacheControl = opts?.cacheControl ?? 'no-cache';
 
         const promises = files.map(async (f) => {
-            const key = this.buildKey(f.filename);
+            const key = this.buildKey(f.filename, opts?.prefix);
             const command = new PutObjectCommand({
                 Bucket: this.bucket,
                 Key: key,
