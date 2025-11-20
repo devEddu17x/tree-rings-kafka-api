@@ -11,7 +11,7 @@ export class StorageService {
     private bucket: string;
     private ingestionUrl: string;
     constructor(private readonly configService: ConfigService) {
-        const storage = this.configService.get('cloudflare');
+        const storage = this.configService.get('storage');
         this.s3 = new S3Client(storage.config);
         this.bucket = storage.bucket;
         this.ingestionUrl = storage.baseUrlIngestion;
