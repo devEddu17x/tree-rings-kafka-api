@@ -18,7 +18,7 @@ export class StorageService {
     private buildKey(filename: string, prefix?: string): string {
         const extension = filename.includes('.') ? filename.split('.').pop() : 'bin';
         const timestamp = Date.now();
-        return `$${prefix ?? 'data'}/${filename}_${timestamp}.${extension}`;
+        return `${prefix ?? 'data'}/${filename}_${timestamp}.${extension}`;
     }
 
     async generatePresignedUrl(
