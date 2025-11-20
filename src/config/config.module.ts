@@ -12,8 +12,9 @@ import * as config from './env'
       isGlobal: true,
       load: [
         config.apiConfig,
+        config.cloudflareConfig,
       ],
     }),
   ],
 })
-export class ConfigModule {}
+export class ConfigModule { }
