@@ -13,7 +13,8 @@ import * as config from './env'
       load: [
         config.apiConfig,
         config.storageConfig,
-        config.processConfig
+        config.processConfig,
+        config.kafkaConfig
       ],
     }),
   ],
