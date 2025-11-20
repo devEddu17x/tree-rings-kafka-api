@@ -7,8 +7,7 @@ export default registerAs('storage', () => {
         STORAGE_SECRET_ACCESS_KEY,
         STORAGE_BUCKET_NAME,
         STORAGE_BASE_URL,
-        STORAGE_BASE_PATH_INGESTION,
-        STORAGE_BASE_PATH_RESULTS,
+
     } = process.env;
 
     const missingVars = [
@@ -17,8 +16,7 @@ export default registerAs('storage', () => {
         ['STORAGE_SECRET_ACCESS_KEY', STORAGE_SECRET_ACCESS_KEY],
         ['STORAGE_BUCKET_NAME', STORAGE_BUCKET_NAME],
         ['STORAGE_BASE_URL', STORAGE_BASE_URL],
-        ['STORAGE_BASE_PATH_INGESTION', STORAGE_BASE_PATH_INGESTION],
-        ['STORAGE_BASE_PATH_RESULTS', STORAGE_BASE_PATH_RESULTS],
+
     ]
         .filter(([, value]) => !value)
         .map(([name]) => name);
@@ -39,7 +37,5 @@ export default registerAs('storage', () => {
             },
         },
         bucket: STORAGE_BUCKET_NAME,
-        ingestionBasePath: STORAGE_BASE_PATH_INGESTION,
-        resultsBasePath: STORAGE_BASE_PATH_RESULTS,
     };
 });
