@@ -1,10 +1,10 @@
 import { registerAs } from "@nestjs/config";
 
 export default registerAs("api", () => {
-  const { API_PREFIX, PORT } = process.env;
+  const { API_PREFIX, PORT: API_PORT } = process.env;
   const missingVars = [
     ['API_PREFIX', API_PREFIX],
-    ['PORT', PORT],
+    ['API_PORT', API_PORT],
   ]
     .filter(([, value]) => !value)
     .map(([name]) => name);
@@ -16,7 +16,7 @@ export default registerAs("api", () => {
   }
   return {
     prefix: API_PREFIX,
-    port: Number(PORT),
+    port: Number(API_PORT),
   };
 
 });
