@@ -49,7 +49,7 @@ export default registerAs('kafka', () => {
         sasl: undefined,
     };
 
-    if (KAFKA_USERNAME && KAFKA_PASSWORD && KAFKA_SASL_MECHANISM) {
+    if (KAFKA_USERNAME?.trim() && KAFKA_PASSWORD?.trim() && KAFKA_SASL_MECHANISM?.trim()) {
         config.sasl = {
             mechanism: KAFKA_SASL_MECHANISM.toLowerCase(),
             username: KAFKA_USERNAME,
