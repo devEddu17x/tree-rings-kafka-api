@@ -1,4 +1,4 @@
-import { Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Kafka, Producer } from 'kafkajs';
 
@@ -13,11 +13,11 @@ export class KafkaService implements OnModuleInit, OnModuleDestroy {
         this.kafka = new Kafka(kafkaConfig);
         this.producer = this.kafka.producer();
     }
-    onModuleInit() {
-        this.connect();
+    async onModuleInit() {
+        await this.connect();
     }
-    onModuleDestroy() {
-        this.disconnect();
+    async onModuleDestroy() {
+        await this.disconnect();
     }
     private async connect() {
         try {
@@ -49,6 +49,7 @@ export class KafkaService implements OnModuleInit, OnModuleDestroy {
             });
         } catch (error) {
             this.logger.error(`Error sending message to topic ${topic}: ${error}`);
+            throw new InternalServerErrorException('Failed to emit message to Kafka');
         }
     }
 }
