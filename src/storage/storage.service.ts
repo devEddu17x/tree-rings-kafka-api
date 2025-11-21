@@ -9,10 +9,12 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 export class StorageService {
     private s3: S3Client;
     private bucket: string;
+    private subdomain: string;
     constructor(private readonly configService: ConfigService) {
         const storage = this.configService.get('storage');
         this.s3 = new S3Client(storage.config);
         this.bucket = storage.bucket;
+        this.subdomain = storage.subdomainUrl;
     }
 
     private buildKey(filename: string, prefix?: string): string {
@@ -51,5 +53,9 @@ export class StorageService {
         });
 
         return Promise.all(promises);
+    }
+
+    getFullUrl(key: string): string {
+        return `${this.subdomain}/${key}`;
     }
 }
