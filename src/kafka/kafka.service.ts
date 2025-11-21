@@ -1,19 +1,17 @@
 import { Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Kafka, Producer } from 'kafkajs';
-import { IngestionPayload } from './interfaces/kafka-payload.interface';
 
 @Injectable()
 export class KafkaService implements OnModuleInit, OnModuleDestroy {
     private kafka: Kafka;
     private producer: Producer;
-    private topics: { ingestion: string; results: string };
     private readonly logger: Logger = new Logger(KafkaService.name);
 
     constructor(private readonly configService: ConfigService) {
         const kafkaConfig = this.configService.get('kafka').config;
-        const topics = this.configService.get('kafka').topics;
         this.kafka = new Kafka(kafkaConfig);
+        this.producer = this.kafka.producer();
     }
     onModuleInit() {
         this.connect();
@@ -30,28 +28,27 @@ export class KafkaService implements OnModuleInit, OnModuleDestroy {
     }
     private async disconnect() {
         try {
-            await this.producer.connect();
+            await this.producer.disconnect();
         } catch (error) {
-            this.logger.error('Can not connect to Kafka broker: ' + error);
+            this.logger.error('Can not disconnect from Kafka broker: ' + error);
         }
     }
 
-    async emitIngestionEvent(payload: IngestionPayload, topic: string): Promise<void> {
-
+    async emit(topic: string, key: string, value: any): Promise<void> {
         try {
-            const messageValue = JSON.stringify(payload);
+            const messageValue = JSON.stringify(value);
 
             await this.producer.send({
                 topic,
                 messages: [
                     {
-                        key: payload.jobId,
+                        key,
                         value: messageValue,
                     },
                 ],
             });
-
         } catch (error) {
+            this.logger.error(`Error sending message to topic ${topic}: ${error}`);
         }
     }
 }
