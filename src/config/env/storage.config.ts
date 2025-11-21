@@ -7,7 +7,7 @@ export default registerAs('storage', () => {
         STORAGE_SECRET_ACCESS_KEY,
         STORAGE_BUCKET_NAME,
         STORAGE_BASE_URL,
-
+        STORAGE_SUBDOMAIN_URL,
     } = process.env;
 
     const missingVars = [
@@ -16,6 +16,7 @@ export default registerAs('storage', () => {
         ['STORAGE_SECRET_ACCESS_KEY', STORAGE_SECRET_ACCESS_KEY],
         ['STORAGE_BUCKET_NAME', STORAGE_BUCKET_NAME],
         ['STORAGE_BASE_URL', STORAGE_BASE_URL],
+        ['STORAGE_SUBDOMAIN_URL', STORAGE_SUBDOMAIN_URL],
 
     ]
         .filter(([, value]) => !value)
@@ -37,5 +38,6 @@ export default registerAs('storage', () => {
             },
         },
         bucket: STORAGE_BUCKET_NAME,
+        subdomainUrl: STORAGE_SUBDOMAIN_URL,
     };
 });
