@@ -1,5 +1,5 @@
 import { Type } from "class-transformer";
-import { IsNotEmpty, IsString, IsEnum, IsOptional, IsArray, ValidateNested } from "class-validator";
+import { IsNotEmpty, IsString, IsEnum, IsOptional, IsArray, ValidateNested, IsNumber } from "class-validator";
 import { ALLOWED_IMAGES } from "../enums/allowed-images.enum";
 
 export class AllowedImagesDTO {
@@ -9,6 +9,12 @@ export class AllowedImagesDTO {
     @IsNotEmpty()
     @IsEnum(ALLOWED_IMAGES)
     contentType: ALLOWED_IMAGES;
+    @IsNotEmpty()
+    @IsNumber()
+    coordinatesX: number;
+    @IsNotEmpty()
+    @IsNumber()
+    coordinatesY: number;
 }
 export class RequestUploadDTO {
     @IsOptional()
