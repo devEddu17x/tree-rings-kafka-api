@@ -52,4 +52,15 @@ export class KafkaService implements OnModuleInit, OnModuleDestroy {
             throw new InternalServerErrorException('Failed to emit message to Kafka');
         }
     }
+
+    async createConsumer(groupId: string) {
+        try {
+            const consumer = this.kafka.consumer({ groupId });
+            await consumer.connect();
+            return consumer;
+        } catch (error) {
+            this.logger.error(`Error creating consumer with groupId ${groupId}: ${error}`);
+            throw new InternalServerErrorException('Failed to create Kafka consumer');
+        }
+    }
 }
