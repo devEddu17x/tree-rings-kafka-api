@@ -14,7 +14,8 @@ import * as config from './env'
         config.apiConfig,
         config.storageConfig,
         config.processConfig,
-        config.kafkaConfig
+        config.kafkaConfig,
+        config.wsConfig
       ],
     }),
   ],
