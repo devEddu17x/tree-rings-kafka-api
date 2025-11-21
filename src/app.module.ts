@@ -13,4 +13,4 @@ import { NotificationsModule } from './notifications/notifications.module';
   controllers: [HealthStatusController],
   providers: [HealthStatusService, NotificationsGateway],
 })
-export class AppModule {}
+export class AppModule { }
