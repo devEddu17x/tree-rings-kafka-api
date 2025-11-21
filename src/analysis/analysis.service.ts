@@ -7,6 +7,7 @@ import { IngestionPayload } from 'src/kafka/interfaces/kafka-payload.interface';
 import { KafkaService } from 'src/kafka/kafka.service';
 import { randomUUID } from 'crypto';
 import { StartProcessDTO } from './dtos/start-process.dto';
+import { metadata } from 'reflect-metadata/no-conflict';
 
 @Injectable()
 export class AnalysisService {
@@ -31,11 +32,15 @@ export class AnalysisService {
     async queueImagesForProcessing(startProcessDto: StartProcessDTO) {
         try {
             const jobId = randomUUID();
-            const promises = startProcessDto.imagesUrl.map(async (imageUrl) => {
+            const promises = startProcessDto.images.map(async (image) => {
                 const payload: IngestionPayload = {
                     jobId,
-                    file: imageUrl,
+                    file: this.storageService.getFullUrl(image.key),
                     timestamp: new Date().toISOString(),
+                    metadata: {
+                        coordinatesX: image.coordinatesX,
+                        coordinatesY: image.coordinatesY,
+                    }
                 };
                 const messageKey = randomUUID();
                 return this.kafkaService.emit(this.ingestionTopic, messageKey, payload);
@@ -45,7 +50,7 @@ export class AnalysisService {
             return {
                 jobId,
                 status: 'QUEUED',
-                message: `${startProcessDto.imagesUrl.length} images have been queued for processing.`,
+                message: `${startProcessDto.images.length} images have been queued for processing.`,
             }
         } catch (error) {
             this.logger.error(`Failed to queue images for processing: ${error}`);
