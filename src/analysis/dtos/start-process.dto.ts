@@ -1,5 +1,5 @@
 import { Type } from "class-transformer";
-import { IsArray, IsNotEmpty, IsNumber, IsString, Min, ValidateNested } from "class-validator";
+import { IsArray, IsNotEmpty, IsNumber, IsString, IsUUID, Min, ValidateNested } from "class-validator";
 
 export class ImageProcessDTO {
     @IsString()
@@ -20,4 +20,7 @@ export class StartProcessDTO {
     @ValidateNested({ each: true })
     @Type(() => ImageProcessDTO)
     images: ImageProcessDTO[];
+    @IsUUID()
+    @IsNotEmpty()
+    clientId: string;
 }
