@@ -1,6 +1,6 @@
 import { JobStatus } from "../enums/job-status.enum";
 
-export interface Welcome {
+export interface ResultPaylod {
     jobId: string;
     clientId: string;
     status: JobStatus;
