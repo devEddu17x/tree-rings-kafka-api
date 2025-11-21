@@ -36,21 +36,19 @@ export class ConsumerService implements OnModuleInit, OnModuleDestroy {
                 eachMessage: async ({ topic, partition, message }) => {
                     try {
                         if (!message.value) {
-                            this.logger.warn('Received message with empty value');
-                            return;
+                            return this.logger.warn('Received message with empty value');
                         }
                         const value = message.value.toString();
                         const payload: ResultPaylod = JSON.parse(value);
-                        this.logger.log(`Received message from topic ${topic}: ${value}`);
 
-                        if (payload.clientId) {
-                            this.notificationsGateway.notifyClient(payload.clientId, payload);
-                        } else {
-                            this.logger.warn('Message received without clientId');
+                        if (!payload.clientId) {
+                            return this.logger.warn('Message received without clientId');
                         }
+                        this.logger.log(`Received message from topic ${topic}`);
+                        this.notificationsGateway.notifyClient(payload.clientId, payload);
 
                     } catch (error) {
-                        this.logger.error(`Error processing message: ${error}`);
+                        return this.logger.error(`Error processing message: ${error}`);
                     }
                 },
             });
