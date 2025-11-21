@@ -41,7 +41,7 @@ export class AnalysisService {
                 return this.kafkaService.emit(this.ingestionTopic, messageKey, payload);
             })
             await Promise.all(promises);
-            this.logger.log(`✅ Job [${jobId}]: Successfully queued ${promises.length} images to Kafka.`);
+            this.logger.log(`Job [${jobId}]: Successfully queued ${promises.length} images to Kafka.`);
             return {
                 jobId,
                 status: 'QUEUED',
