@@ -10,6 +10,8 @@ export default registerAs('kafka', () => {
         KAFKA_SASL_MECHANISM,
         KAFKA_USERNAME,
         KAFKA_PASSWORD,
+        KAFKA_INGESTION_TOPIC,
+        KAFKA_RESULTS_TOPIC,
     } = process.env;
 
     const isProduction = NODE_ENV === 'production';
@@ -55,5 +57,10 @@ export default registerAs('kafka', () => {
         };
     }
 
-    return { ...config };
+    return {
+        config, topics: [{
+            ingestion: KAFKA_INGESTION_TOPIC,
+            results: KAFKA_RESULTS_TOPIC,
+        },]
+    };
 });
