@@ -36,6 +36,7 @@ export class AnalysisService {
                     jobId,
                     file: this.storageService.getFullUrl(image.key),
                     timestamp: new Date().toISOString(),
+                    clientId: startProcessDto.clientId,
                     metadata: {
                         coordinatesX: image.coordinatesX,
                         coordinatesY: image.coordinatesY,
