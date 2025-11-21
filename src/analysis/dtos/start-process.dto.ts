@@ -1,5 +1,5 @@
 import { Type } from "class-transformer";
-import { IsArray, IsNotEmpty, IsNumber, IsOptional, IsString, Min, ValidateNested } from "class-validator";
+import { IsArray, IsNotEmpty, IsNumber, IsString, Min, ValidateNested } from "class-validator";
 
 export class ImageProcessDTO {
     @IsString()

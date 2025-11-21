@@ -7,7 +7,6 @@ import { IngestionPayload } from 'src/kafka/interfaces/kafka-payload.interface';
 import { KafkaService } from 'src/kafka/kafka.service';
 import { randomUUID } from 'crypto';
 import { StartProcessDTO } from './dtos/start-process.dto';
-import { metadata } from 'reflect-metadata/no-conflict';
 
 @Injectable()
 export class AnalysisService {
