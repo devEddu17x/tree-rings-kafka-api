@@ -3,7 +3,7 @@ import { StorageService } from 'src/storage/storage.service';
 import { RequestUploadDTO } from './dtos/request-upload.dto';
 import { FilePlan } from 'src/storage/interfaces/file-plan.interface';
 import { ConfigService } from '@nestjs/config';
-import { IngestionPayload } from 'src/kafka/interfaces/kafka-payload.interface';
+import { IngestionPayload } from 'src/kafka/interfaces/kafka-ingestion-payload.interface';
 import { KafkaService } from 'src/kafka/kafka.service';
 import { randomUUID } from 'crypto';
 import { StartProcessDTO } from './dtos/start-process.dto';
