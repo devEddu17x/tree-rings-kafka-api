@@ -58,9 +58,10 @@ export default registerAs('kafka', () => {
     }
 
     return {
-        config, topics: [{
+        config,
+        topics: {
             ingestion: KAFKA_INGESTION_TOPIC,
             results: KAFKA_RESULTS_TOPIC,
-        },]
+        }
     };
 });
