@@ -6,9 +6,14 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 @WebSocketGateway({ cors: true })
 export class NotificationsGateway implements OnGatewayConnection, OnGatewayDisconnect {
+  private readonly wsConfig: any;
+  constructor(private readonly configService: ConfigService) {
+    this.wsConfig = this.configService.get('websocket');
+  }
   @WebSocketServer()
   server: Server;
 
@@ -19,16 +24,17 @@ export class NotificationsGateway implements OnGatewayConnection, OnGatewayDisco
 
     if (clientId) {
       client.join(clientId);
-      this.logger.log(`Cliente conectado: ${clientId}`);
+      this.logger.log(`Client connected: ${clientId}`);
     }
   }
 
   handleDisconnect(client: Socket) {
-    this.logger.log(`Cliente desconectado: ${client.id}`);
+    this.logger.log(`Client disconnected: ${client.id}`);
   }
 
   notifyClient(clientId: string, payload: any) {
-    this.server.to(clientId).emit('processing-finished', payload);
-    this.logger.log(`Notificación enviada a ${clientId}`);
+    const eventName = this.wsConfig.events.processFinished;
+    this.server.to(clientId).emit(eventName, payload);
+    this.logger.log(`Notification sent to ${clientId}`);
   }
 }
