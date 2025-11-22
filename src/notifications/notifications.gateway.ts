@@ -8,16 +8,21 @@ import { Server, Socket } from 'socket.io';
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
-@WebSocketGateway({ cors: true })
+@WebSocketGateway({
+  cors: {
+    origin: '*',
+    credentials: true,
+  },
+})
 export class NotificationsGateway implements OnGatewayConnection, OnGatewayDisconnect {
+  @WebSocketServer()
+  server: Server;
+
+  private readonly logger = new Logger(NotificationsGateway.name);
   private readonly wsConfig: any;
   constructor(private readonly configService: ConfigService) {
     this.wsConfig = this.configService.get('websocket');
   }
-  @WebSocketServer()
-  server: Server;
-
-  private logger = new Logger(NotificationsGateway.name);
 
   handleConnection(client: Socket) {
     const clientId = client.handshake.query.clientId as string;
