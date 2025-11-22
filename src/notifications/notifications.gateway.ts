@@ -7,6 +7,7 @@ import {
 import { Server, Socket } from 'socket.io';
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { ResultPaylod } from 'src/kafka/interfaces/kafka-result-paylod.interface';
 
 @WebSocketGateway({
   cors: {
@@ -47,7 +48,7 @@ export class NotificationsGateway implements OnGatewayConnection, OnGatewayDisco
     this.logger.log(`Client disconnected: ${clientId || client.id}`);
   }
 
-  notifyClient(clientId: string, payload: any) {
+  notifyClient(clientId: string, payload: ResultPaylod) {
     const eventName = this.wsConfig.events.processFinished;
     this.server.to(clientId).emit(eventName, payload);
     this.logger.log(`Notification sent to ${clientId}`);
