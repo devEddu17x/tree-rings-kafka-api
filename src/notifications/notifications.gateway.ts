@@ -11,7 +11,6 @@ import { ConfigService } from '@nestjs/config';
 @WebSocketGateway({
   cors: {
     origin: '*',
-    credentials: true,
   },
 })
 export class NotificationsGateway implements OnGatewayConnection, OnGatewayDisconnect {
@@ -20,21 +19,32 @@ export class NotificationsGateway implements OnGatewayConnection, OnGatewayDisco
 
   private readonly logger = new Logger(NotificationsGateway.name);
   private readonly wsConfig: any;
+
   constructor(private readonly configService: ConfigService) {
     this.wsConfig = this.configService.get('websocket');
   }
 
-  handleConnection(client: Socket) {
+  handleConnection(client: Socket, ...args: any[]) {
     const clientId = client.handshake.query.clientId as string;
 
-    if (clientId) {
-      client.join(clientId);
-      this.logger.log(`Client connected: ${clientId}`);
+    if (!clientId) {
+
+      this.logger.warn(`Connection rejected: Missing clientId (socket: ${client.id})`);
+      client.emit('error', {
+        message: 'Client ID is required for connection. You should provide it as a query parameter (clientId).',
+        code: 'MISSING_CLIENT_ID',
+      });
+      client.disconnect(true);
+      return;
     }
+
+    client.join(clientId);
+    this.logger.log(`Client connected: ${clientId} (socket: ${client.id})`);
   }
 
   handleDisconnect(client: Socket) {
-    this.logger.log(`Client disconnected: ${client.id}`);
+    const clientId = client.handshake.query.clientId as string;
+    this.logger.log(`Client disconnected: ${clientId || client.id}`);
   }
 
   notifyClient(clientId: string, payload: any) {
