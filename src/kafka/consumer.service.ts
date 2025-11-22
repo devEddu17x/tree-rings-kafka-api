@@ -1,6 +1,6 @@
 import { Injectable, OnModuleInit, OnModuleDestroy, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Kafka, Consumer } from 'kafkajs';
+import { Consumer } from 'kafkajs';
 import { NotificationsGateway } from 'src/notifications/notifications.gateway';
 import { ResultPaylod } from './interfaces/kafka-result-paylod.interface';
 import { KafkaService } from './kafka.service';
