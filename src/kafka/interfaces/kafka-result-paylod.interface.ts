@@ -7,13 +7,13 @@ export interface ResultPaylod {
     timestamp: Date;
     data?: {
         originalUrl: string;
-        processedUrl: string;
         ringsCount: number;
         metadata: {
             coordinatesX: number;
             coordinatesY: number;
             processingTimeMs: number;
         };
+        results: any;
     };
     error?: null;
 }
