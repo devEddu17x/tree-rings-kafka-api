@@ -14,6 +14,10 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
+  app.enableCors({
+    origin: '*',
+    methods: 'GET,PUT,PATCH,POST',
+  });
   await app.listen(configService.get('api').port);
 }
 bootstrap();
